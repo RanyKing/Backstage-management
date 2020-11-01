@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<aside th:fragment="left">
+    <div id="sidebar"  class="nav-collapse " >
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+
+            <p class="centered"><a th:href="@{/profile.html}"><img th:src="@{/assets/img/ui-sam.jpg}" class="img-circle" width="60"></a></p>
+            <h5 class="centered">admin</h5>
+
+            <li class="mt">
+                <a th:href="@{/index}">
+                    <i class="fa fa-dashboard"></i>
+                    <span>首页</span>
+                </a>
+            </li>
+
+            <li class="sub-menu" th:each="flist:${session.fmlist}">
+                <a href="javascript:;" >
+                    <i class="fa fa-book"></i>
+                    <span th:text="${flist.menu_name}">Admin管理</span>
+                </a>
+                <ul class="sub">
+                    <li th:each="zmlist:${flist.cmenuList}">
+                        <a  th:href="@{${zmlist.menu_url}}">
+                            <span th:text="${zmlist.menu_name}"></span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+        <!-- sidebar menu end-->
+    </div>
+</aside>
+</body>
+</html>

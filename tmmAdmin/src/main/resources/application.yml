@@ -1,0 +1,21 @@
+
+#连接数据库的信息
+#连接池的信息
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql:///eshop
+    username: root
+    password: 1234
+    type: com.alibaba.druid.pool.DruidDataSource
+  mvc:
+    static-path-pattern: /**
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+#设置上传文件的阈值
+#包扫描起别名
+mybatis:
+  type-aliases-package: com.ybr.tmmAdmin.pojo
+

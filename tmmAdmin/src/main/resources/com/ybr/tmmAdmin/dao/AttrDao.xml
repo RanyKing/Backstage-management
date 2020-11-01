@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybr.tmmAdmin.dao.AttrDao">
+    <select id="getAttrList" resultType="attr">
+        select * from spu_attr_value
+    </select>
+
+    <insert id="insertValue" parameterType="attrvo">
+        insert into spu_attr_value (value_name,createtime,updatetime,key_id)
+        values (#{value_name},#{createtime},#{updatetime},#{key_id})
+    </insert>
+
+
+
+    <delete id="deleteAttr">
+        delete from spu_attr_value  where id=#{id}
+    </delete>
+
+    <select id="getAttrById" resultType="attrvo">
+        select * from spu_attr_value where id=#{id}
+    </select>
+
+    <select id="getSkuByAttrId" resultType="sku">
+        SELECT * FROM `spu_attr_key` WHERE id=(SELECT key_id FROM `spu_attr_value` WHERE id=#{id})
+    </select>
+
+    <update id="updateAttr" parameterType="attrvo">
+        UPDATE `spu_attr_value` SET key_id=#{key_id},value_name=#{value_name},updatetime=#{updatetime}  WHERE id=#{id}
+    </update>
+</mapper>

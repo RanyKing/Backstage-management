@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybr.tmmAdmin.dao.MenuDao">
+    <select id="getMenuByUsername" resultMap="getMenuByUsernameMap">
+SELECT * FROM (SELECT gf.`menu_id` fmenu_id,gf.`menu_name` fmenu_name
+ FROM admin a
+INNER JOIN admin_role b
+ON a.`admin_id`=b.`admin_id`
+INNER JOIN role c
+ON b.`role_id`=c.`role_id`
+INNER JOIN  role_permission d
+ON c.`role_id`=d.`role_id`
+INNER JOIN  permission e
+ON d.`permission_id`=e.`permission_id`
+INNER JOIN permission_menu f
+ON e.`permission_id`= f.permission_id
+INNER JOIN menu gf
+ON f.menu_id = gf.menu_id
+WHERE a.`admin_id`=#{admin_id} AND gf.`pid` IS NULL) a
+INNER JOIN
+(SELECT gz.`menu_id` zmenu_id,gz.`menu_name` zmenu_name,gz.`pid` zpid,gz.`menu_url` zmenu_url
+ FROM admin a
+INNER JOIN admin_role b
+ON a.`admin_id`=b.`admin_id`
+INNER JOIN role c
+ON b.`role_id`=c.`role_id`
+INNER JOIN  role_permission d
+ON c.`role_id`=d.`role_id`
+INNER JOIN  permission e
+ON d.`permission_id`=e.`permission_id`
+INNER JOIN permission_menu f
+ON e.`permission_id`= f.permission_id
+INNER JOIN menu gz
+ON f.menu_id = gz.menu_id
+WHERE a.`admin_id`=#{admin_id} AND gz.`pid` IS NOT NULL)
+b
+ON a.fmenu_id=b.zpid
+    </select>
+    <resultMap id="getMenuByUsernameMap" type="menu">
+        <id column="fmenu_id" property="menu_id"></id>
+        <result column="fmenu_name" property="menu_name"></result>
+        <collection property="cmenuList" ofType="menu">
+            <id column="zmenu_id" property="menu_id"></id>
+            <result column="zmenu_name" property="menu_name"></result>
+            <result column="zmenu_url" property="menu_url"></result>
+        </collection>
+    </resultMap>
+</mapper>

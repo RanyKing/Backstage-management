@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybr.tmmAdmin.dao.CategoryDao">
+    <select id="getCateList" resultMap="getCateListMap">
+        select * from category
+    </select>
+    <resultMap id="getCateListMap" type="category">
+        <id column="id" property="id"></id>
+        <result column="cate_name" property="cate_name"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="updatetime" property="updatetime"></result>
+        <result column="parent_id" property="parent_id"></result>
+    </resultMap>
+
+
+    <insert id="insertCate" parameterType="categoryVo">
+        <selectKey keyProperty="category_id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into category (cate_name,createtime,updatetime) values(#{cate_name},#{createtime},#{updatetime})
+    </insert>
+
+    <insert id="insertCateBrand">
+        insert into brand_categories (brand_id,category_id) values(#{brand_id},#{category_id})
+    </insert>
+
+    <delete id="deleteCateBrandById">
+        delete from brand_categories where category_id=#{category_id}
+    </delete>
+
+    <delete id="deleteCateById">
+        delete from category where id=#{id}
+    </delete>
+
+    <select id="getCateById" resultType="category">
+        select * from category where id=#{id}
+    </select>
+
+    <update id="updateCate">
+        update category set cate_name=#{cate_name} where id=#{id}
+    </update>
+
+    <delete id="deleteKeyById">
+        delete from spu_attr_key_categories where category_id=#{category_id}
+    </delete>
+
+    <delete id="deleteSpuById">
+        delete from spu where spu_category_id=#{spu_category_id}
+    </delete>
+
+    <select id="getAttrBySkuId" resultType="attr">
+        select * from spu_attr_value where key_id=#{key_id}
+    </select>
+</mapper>

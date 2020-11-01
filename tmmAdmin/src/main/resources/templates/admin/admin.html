@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>甜蜜蜜cake后台管理系统</title>
+    <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/table-responsive.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<section id="container" >
+    <!--header start-->
+    <div  th:replace="common/header::header"></div>
+    <!--header end-->
+
+    <!--sidebar(menu) start-->
+    <div  th:replace="common/left::left"></div>
+    <!--sidebar(menu) end-->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <h3> 员工管理</h3>
+
+            <div class="col-md-12">
+                <div class="content-panel">
+
+                    <a th:href="@{/admin/add}" class="btn btn-success ml-1">添加用户</a>
+                    <hr>
+                    <div class="form-panel">
+
+                        <form th:action="@{/admin/admin}" class="form-inline" role="form">
+                            <div class="form-group">
+                                <label class="sr-only" for="exampleInputEmail2">用户名</label>
+                                <input type="text" name="admin_name" class="form-control" id="exampleInputEmail2" th:value="${aname}" placeholder="用户名">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="exampleInputPassword2">昵称</label>
+                                <input type="text" name="admin_nickname" class="form-control" id="exampleInputPassword2" placeholder="昵称" th:value="${anickname}">
+                            </div>
+                            <button type="submit" class="btn btn-theme">搜索</button>
+                            <a  th:href="@{/admin/download}" type="submit" class="btn btn-warning">下载信息</a>
+                        </form>
+                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>昵 称</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="a:${alist}">
+                            <td th:text="${a.admin_id}">1</td>
+                            <td th:text="${a.admin_name}">Mark</td>
+                            <td th:text="${a.admin_nickname}">Otto</td>
+                            <td>
+                                <a th:href="@{/admin/update(id=${a.admin_id})}" class="btn btn-primary btn-xs"><i class="fa fa-pencil" title="修改"></i></a>
+
+                                <a th:href="@{/admin/delete(id=${a.admin_id})}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o" title="删除"></i></a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div><!-- --/content-panel ---->
+            </div>
+
+        </section><! --/wrapper -->
+    </section>
+    <!--main content end-->
+
+    <!--footer start-->
+    <div  th:replace="common/footer::footer"></div>
+    <!--footer start-->
+</section>
+<script th:src="@{/assets/js/jquery.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script class="include" type="text/javascript" th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{/assets/js/jquery.nicescroll.js}" type="text/javascript"></script>
+<script th:src="@{/assets/js/common-scripts.js}"></script>
+
+
+</body>
+</html>

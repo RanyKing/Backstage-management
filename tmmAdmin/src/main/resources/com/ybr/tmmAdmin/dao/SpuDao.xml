@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybr.tmmAdmin.dao.SpuDao">
+
+    <select id="getSpuList" resultMap="getSpuListMap">
+        select * from spu
+    </select>
+    <resultMap id="getSpuListMap" type="spu">
+        <id column="id" property="id"></id>
+        <result column="spu_name" property="spu_name" ></result>
+        <result column="spu_thumburl" property="spu_thumburl" ></result>
+        <result column="spu_price" property="spu_price" ></result>
+        <result column="spu_title" property="spu_title" ></result>
+        <result column="spu_introduction" property="spu_introduction" ></result>
+        <result column="spu_warningstock" property="spu_warningstock" ></result>
+        <result column="spu_maxbuy" property="spu_maxbuy" ></result>
+        <result column="spu_unit" property="spu_unit" ></result>
+        <result column="spu_status" property="spu_status" ></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="updatetime" property="updatetime"></result>
+        <result column="spu_brand_id" property="spu_brand_id"></result>
+        <result column="spu_category_id" property="spu_category_id"></result>
+
+        <association property="brand"
+                     column="spu_brand_id"
+                     javaType="brand"
+                     select="com.ybr.tmmAdmin.dao.BrandDao.searchBrandById"
+                     fetchType="lazy"
+        ></association>
+
+        <association property="category"
+                     column="spu_category_id"
+                     javaType="category"
+                     select="com.ybr.tmmAdmin.dao.CategoryDao.getCateById"
+                     fetchType="lazy"
+        ></association>
+
+    </resultMap>
+
+    <select id="getSpuStatus" resultType="int">
+        select spu_status from spu where id=#{id}
+    </select>
+
+    <update id="status1ById">
+        update spu set spu_status=1 where id=#{id}
+    </update>
+
+    <update id="status0ById">
+        update spu set spu_status=0 where id=#{id}
+    </update>
+
+    <delete id="deleteSpu">
+        delete from spu where id=#{id}
+    </delete>
+
+    <delete id="deleteguige">
+        delete from sku where sku_spu_id=#{sku_spu_id}
+    </delete>
+
+    <delete id="deleteAttrSpu">
+        delete from spu_attr_value_spus where spu_id=#{id}
+    </delete>
+
+    <insert id="addSpu" parameterType="spuvo">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into spu (spu_name,spu_price,spu_title,spu_introduction,spu_warningstock,spu_maxbuy,createtime,updatetime,spu_brand_id,spu_category_id) values
+        (#{spu_name},#{spu_price},#{spu_title},#{spu_introduction},#{spu_warningstock},#{spu_maxbuy},#{createtime},#{updatetime},#{spu_brand_id},#{spu_category_id})
+    </insert>
+
+    <insert id="addSpuAttr">
+        insert into spu_attr_value_spus (spu_attr_value_id,spu_id) values
+        <foreach collection="spu_attr_value_ids" item="spu_attr_value_id" separator=",">
+            (#{spu_attr_value_id},#{spu_id})
+        </foreach>
+    </insert>
+
+    <select id="getSpuById" resultType="spuvo">
+        select * from spu where id=#{id}
+    </select>
+
+    <select id="getListBySpuId" resultType="int">
+        select spu_attr_value_id from spu_attr_value_spus where spu_id=#{spu_id}
+    </select>
+
+    <select id="getAttrsByIds" resultType="attr">
+       SELECT * FROM `spu_attr_value` WHERE id IN (SELECT spu_attr_value_id FROM `spu_attr_value_spus` WHERE spu_id=#{id})
+    </select>
+
+    <update id="update" parameterType="spuvo">
+        update spu set spu_name=#{spu_name},spu_price=#{spu_price},spu_title=#{spu_title},spu_introduction=#{spu_introduction},
+        spu_warningstock=#{spu_warningstock},spu_maxbuy=#{spu_maxbuy},updatetime=#{updatetime},spu_brand_id=#{spu_brand_id},spu_category_id=#{spu_category_id}
+        where id=#{id}
+    </update>
+</mapper>

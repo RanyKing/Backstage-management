@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <title>甜蜜蜜cake后台管理系统-首页</title>
+
+
+    <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/table-responsive.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<section id="container" >
+    <!-- **********************************************************************************************************************************************************
+    TOP BAR CONTENT & NOTIFICATIONS
+    *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <!--logo start-->
+        <a th:href="@{/index}" class="logo"><b>甜蜜蜜cake后台管理系统</b></a>
+        <!--logo end-->
+        <div class="top-menu">
+            <ul class="nav pull-right top-menu">
+                <li><a class="logout" th:href="@{/admin/login}">退出</a></li>
+            </ul>
+        </div>
+    </header>
+    <!--header end-->
+
+    <!-- **********************************************************************************************************************************************************
+    MAIN SIDEBAR MENU
+    *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar"  class="nav-collapse ">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+
+                <p class="centered"><a th:href="@{/profile.html}"><img th:src="@{/assets/img/ui-sam.jpg}" class="img-circle" width="60"></a></p>
+                <h5 class="centered" th:text="${session.uname}"></h5>
+
+                <li class="mt">
+                    <a th:href="@{/index}">
+                        <i class="fa fa-dashboard"></i>
+                        <span>首页</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu" th:each="flist:${session.fmlist}">
+                    <a href="javascript:;" >
+                        <i class="fa fa-book"></i>
+                        <span th:text="${flist.menu_name}">Admin管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li th:each="zmlist:${flist.cmenuList}">
+                            <a  th:href="@{${zmlist.menu_url}}">
+                                <span th:text="${zmlist.menu_name}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- sidebar menu end-->
+        </div>
+    </aside>
+    <!--sidebar end-->
+
+    <!-- **********************************************************************************************************************************************************
+    MAIN CONTENT
+    *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <h3><i class="fa fa-angle-right"></i> 首页</h3>
+            <div class="row mt">
+                <div class="col-md-4 col-sm-4 mb col-md-offset-4" >
+                    <div class="darkblue-panel pn">
+                        <div class="darkblue-header">
+                            <h5>欢迎您<span style="color: #ff0000" th:text="${session.uname}"></span></h5>
+                        </div>
+                        <h1 class="mt"><i class="fa fa-user fa-1x"></i></h1>
+                        <p>您的职位为:</p>
+                        <footer>
+                            <div class="centered" th:each="r:${session.roleList}">
+                                <h5>
+                                    <span th:text="${r.role_name}"></span>
+                                </h5>
+                            </div>
+                        </footer>
+                    </div><!-- -- /darkblue panel ---->
+                </div>
+            </div>
+        </section><! --/wrapper -->
+    </section><!-- /MAIN CONTENT -->
+
+    <!--main content end-->
+    <!--footer start-->
+    <footer class="site-footer">
+        <div class="text-center">
+            2020甜蜜蜜  <a th:href="@{http://www.atstudy.com}" target="_blank">学习甜蜜蜜</a>
+            <a href="#" class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+    </footer>
+    <!--footer end-->
+</section>
+
+
+
+<script th:src="@{/assets/js/jquery.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script class="include" type="text/javascript" th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{/assets/js/jquery.nicescroll.js}" type="text/javascript"></script>
+<script th:src="@{/assets/js/common-scripts.js}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybr.tmmAdmin.dao.SkuDao">
+    <select id="getSkuList" resultType="sku">
+        select * from spu_attr_key
+    </select>
+
+    <insert id="insertSku" parameterType="skukey">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into spu_attr_key  (key_name,createtime,updatetime) values (#{key_name},#{createtime},#{updatetime})
+    </insert>
+
+    <insert id="insertSkuCate">
+        insert into spu_attr_key_categories (spu_attr_key_id,category_id) values (#{id},#{category_id})
+    </insert>
+
+    <delete id="deleteSkuCateById">
+        delete from spu_attr_key_categories where spu_attr_key_id=#{spu_attr_key_id}
+    </delete>
+
+    <delete id="deleteSkuById">
+        delete from spu_attr_key where id=#{id}
+    </delete>
+
+    <delete id="deleteAttrById">
+        delete from spu_attr_value where key_id=#{key_id}
+    </delete>
+
+    <select id="getSkuByCateId" resultMap="getSkuByCateIdMap">
+        SELECT * FROM `spu_attr_key` WHERE id IN
+        (SELECT spu_attr_key_id FROM `spu_attr_key_categories` WHERE category_id=#{category_id})
+    </select>
+    <resultMap id="getSkuByCateIdMap" type="skukey">
+        <id property="id" column="id"></id>
+        <result column="key_name" property="key_name"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="updatetime" property="updatetime"></result>
+        <collection
+                property="attrList"
+                ofType="attr"
+                column="id"
+                select="com.ybr.tmmAdmin.dao.CategoryDao.getAttrBySkuId"
+                fetchType="lazy">
+        </collection>
+    </resultMap>
+</mapper>

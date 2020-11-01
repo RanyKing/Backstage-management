@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <title>甜蜜蜜cake后台管理系统</title>
+
+
+    <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/table-responsive.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<section id="container" >
+    <!--header start-->
+    <div  th:replace="common/header::header"></div>
+    <!--header end-->
+
+    <!--sidebar(menu) start-->
+    <div  th:replace="common/left::left"></div>
+    <!--sidebar(menu) end-->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <h3> 修改品牌</h3>
+
+            <div class="col-md-12">
+                <div class="content-panel">
+
+                    <hr>
+
+                    <form th:action="@{/brand/alter}" class="form-horizontal style-form" method="get">
+
+                        <div class="form-group">
+                            <label class="col-sm-1 col-sm-1 control-label" >品牌名：</label>
+                            <div class="col-sm-12">
+                                <input type="hidden" name="id" th:value="${brand.id}">
+                                <input type="text" class="form-control" name="brand_name" th:value="${brand.brand_name}">
+                            </div>
+
+
+                            <label class="col-sm-1 col-sm-1 control-label" >品牌介绍：</label>
+                            <div class="col-sm-12">
+                                <input type="textarea" class="form-control" name="brand_introduction" th:value="${brand.brand_introduction}">
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <div>
+                                <button type="submit" class="btn btn-theme">确认修改</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div><!-- --/content-panel ---->
+            </div>
+
+        </section><! --/wrapper -->
+    </section><!-- /MAIN CONTENT -->
+
+    <!--main content end-->
+
+    <!--footer start-->
+    <div  th:replace="common/footer::footer"></div>
+    <!--footer start-->
+</section>
+
+
+
+<script th:src="@{/assets/js/jquery.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script class="include" type="text/javascript" th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{/assets/js/jquery.nicescroll.js}" type="text/javascript"></script>
+<script th:src="@{/assets/js/common-scripts.js}"></script>
+
+
+</body>
+</html>

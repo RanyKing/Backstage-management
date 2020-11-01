@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybr.tmmAdmin.dao.RoleDao">
+    <select id="getRoleListByAdminId" resultMap="Role">
+        select a.*
+            from `role` a
+                inner join `admin_role` b on a.role_id = b.role_id
+            where
+                b.admin_id = #{ admin_id }
+    </select>
+
+
+    <select id="getRoleListByOperateUrl" resultMap="Role">
+        select e.*
+            from `operate` a
+                inner join `permission_operate` b on a.operate_id = b.operate_id
+                inner join `permission` c on b.permission_id = c.permission_id
+                inner join `role_permission` d on c.permission_id = d.permission_id
+                inner join `role` e on d.role_id = e.role_id
+            where a.operate_url = #{ operate_url }
+    </select>
+
+    <resultMap id="Role" type="role">
+        <id property="role_id" column="role_id"/>
+        <result property="role_name" column="role_name"/>
+    </resultMap>
+    <select id="getRoleList" resultType="role">
+        select * from role
+    </select>
+
+    <select id="getRoleListById" resultMap="getRoleListByIdMap">
+SELECT * FROM role d
+LEFT JOIN
+(SELECT c.role_id yrole_id  FROM role c
+INNER JOIN admin_role a ON c.`role_id`=a.`role_id`
+INNER JOIN admin b ON a.`admin_id`=b.admin_id
+WHERE b.admin_id=#{admin_id}) e
+ON d.role_id=e.yrole_id
+    </select>
+    <resultMap id="getRoleListByIdMap" type="RoleVo">
+        <id property="role_id" column="role_id"></id>
+        <result property="role_name" column="role_name"></result>
+        <result property="yrole_id" column="yrole_id"></result>
+    </resultMap>
+
+    <insert id="insertAdminRole">
+        insert into admin_role (admin_id,role_id) values
+        <foreach collection="roleids" item="role_id" separator=",">
+            (#{admin_id},#{role_id})
+        </foreach>
+    </insert>
+
+    <select id="getpermissionById" resultMap="getpermissionByIdMap">
+SELECT a.`role_id`,c.*FROM role_permission a
+INNER JOIN (SELECT role_id yrole_id,role_name FROM role WHERE role_id=#{role_id})b
+ON a.`role_id`=b.yrole_id
+RIGHT JOIN permission c
+ON c.permission_id=a.`permission_id`
+    </select>
+    <resultMap id="getpermissionByIdMap" type="permissionVo">
+        <id column="role_id" property="role_id"></id>
+        <result column="permission_id" property="permission_id"></result>
+        <result column="permission_name" property="permission_name"></result>
+    </resultMap>
+
+    <select id="getRoleById" resultMap="getRoleByIdMap">
+        select * from role where role_id=#{role_id}
+    </select>
+    <resultMap id="getRoleByIdMap" type="RoleVo">
+        <id column="role_id" property="role_id"></id>
+        <result column="role_name" property="role_name"></result>
+        <result column="yrole_id" property="yrole_id"></result>
+        <collection
+                property="permissionVoList"
+                ofType="permissionVo"
+                column="role_id"
+                select="com.ybr.tmmAdmin.dao.RoleDao.getpermissionById"
+                fetchType="lazy">
+        </collection>
+    </resultMap>
+
+    <delete id="deleteRolePermission">
+        delete from role_permission where role_id=#{role_id}
+    </delete>
+    
+    <insert id="insertRolePermission">
+        insert into role_permission (role_id,permission_id) values 
+        <foreach collection="permissionIds" item="permission_id" separator=",">
+           (#{role_id},#{permission_id})
+        </foreach>
+    </insert>
+
+    <select id="getPermissionList" resultType="permission">
+        select * from permission
+    </select>
+
+    <insert id="addRole">
+        <selectKey keyProperty="role_id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        insert into role (role_name) values (#{role_name})
+    </insert>
+    
+    <insert id="addRolePermission">
+        insert into role_permission (role_id,permission_id) values
+        <foreach collection="permissionIds" item="permission_id" separator=",">
+            (#{role_id},#{permission_id})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRole">
+        delete from role where role_id=#{role_id}
+    </delete>
+
+    <update id="update" parameterType="permissionVo">
+        update role set role_name=#{role_name} where role_id=#{role_id}
+    </update>
+</mapper>
